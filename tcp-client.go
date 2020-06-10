@@ -8,7 +8,12 @@ import (
 	"sync"
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/rsa"
+	"crypto/rand"
+	"crypto/sha512"
+	"encoding/json"
 	"strings"
+//	"math/rand"
 //	"io/ioutil"
 )
 
@@ -30,6 +35,46 @@ func main() {
 	//conn, _ := net.Dial("tcp4", "86.145.80.193:8081")
 	
 	fmt.Println("Connection established")
+	//publicKey := conn.Read
+	publicKeyMessage, err := bufio.NewReader(conn).ReadString('\n')
+	if err != nil {
+		panic(err)
+	}
+	// need to remove '\n' from end of json message
+	publicKeyMessage = strings.TrimSuffix(publicKeyMessage, "\n")
+	// convert string back into byte array
+	publicKeyByte := []byte(publicKeyMessage)
+	publicKey := &rsa.PublicKey{}
+	err = json.Unmarshal(publicKeyByte, publicKey)
+	if err != nil {
+		panic(err)
+	}
+	
+	fmt.Println("Public key is: ", publicKey.N)
+
+	// generate, encrypt and send the aes symmetric key to server!
+
+	fmt.Println("Generating and sending encypted key")
+	symmetrickey := make([]byte, 32)
+	rand.Read(symmetrickey)
+	fmt.Println("32 byte key is:", symmetrickey)
+
+	// EncryptWithPublicKey
+	hash := sha512.New()
+	ciphertext, err := rsa.EncryptOAEP(hash, rand.Reader, publicKey, symmetrickey, nil)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("cipher text", ciphertext)
+	pubInJson, err := json.Marshal(ciphertext)
+	conn.Write(pubInJson)
+	var carriagereturn string
+	carriagereturn = "\n"
+	bytereturn := []byte(carriagereturn)
+	conn.Write(bytereturn)
+
+	fmt.Println("encrypted key sent to server!")
+
 	go func() { // wait for text input with \n
 		for {
 		 reader := bufio.NewReader(os.Stdin)
@@ -43,15 +88,17 @@ func main() {
 		for {
 			// fmt.Println("Awaiting messages")
 			message, _ := bufio.NewReader(conn).ReadString('\n')
-			fmt.Print("\nMessage received: "+message)
 			if message == "" {
 				wg.Done()
 				break
 			}
-			// fmt.Print("Decrypting ciphertext...")
-			// bytearray := []byte(message)
-			// plaintext := receivedecrypt(bytearray)
-			// fmt.Println("Decrypt: ", plaintext)
+			message = strings.TrimSuffix(message, "\n")
+			bytemessage := []byte(message)
+			fmt.Println("Byte Array received: ", bytemessage)
+
+			fmt.Print("Decrypting ciphertext...")
+			plaintext := receivedecrypt(symmetrickey, bytemessage)
+			fmt.Println("Decrypt: ", plaintext)
 			fmt.Print("Text to send:")
 		}
 	}()
@@ -59,10 +106,10 @@ func main() {
 	wg.Wait()
 }
 
-func receivedecrypt(ciphertext []byte) string {
+func receivedecrypt(symmetrickey []byte, ciphertext []byte) string {
 	fmt.Println("Decryption Program v0.01")
 
-	key := []byte("passphrasewhichneedstobe32bytes!")
+	key := symmetrickey
 //	ciphertext, err := ioutil.ReadFile("myfile.data")
 	fmt.Println(ciphertext)
 
