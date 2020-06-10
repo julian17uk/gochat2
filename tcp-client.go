@@ -8,6 +8,7 @@ import (
 	"sync"
 	"crypto/aes"
 	"crypto/cipher"
+	"strings"
 //	"io/ioutil"
 )
 
@@ -19,9 +20,13 @@ func main() {
 	fmt.Println("Please enter ipv6 address to connect to:")
 	reader0 := bufio.NewReader(os.Stdin)
 	ipv6, _ := reader0.ReadString('\n')
+	//ipv6test = "[2a00:23c4:8682:5e00:dc3c:35eb:ccef:4d1b]:8081"
+	ipv6 = strings.TrimSuffix(ipv6, "\n")
+	ipv6 = "[" + ipv6 + "]:8081"
 	fmt.Println("Echo ipv6:", ipv6)
 	// connect to this socket
-	conn, _ := net.Dial("tcp6", "[2a00:23c4:8682:5e00:dc3c:35eb:ccef:4d1b]:8081")
+	//conn, _ := net.Dial("tcp6", "[2a00:23c4:8682:5e00:dc3c:35eb:ccef:4d1b]:8081")
+	conn, _ := net.Dial("tcp6", ipv6)
 	//conn, _ := net.Dial("tcp4", "86.145.80.193:8081")
 	
 	fmt.Println("Connection established")
