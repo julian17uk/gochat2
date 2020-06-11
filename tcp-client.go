@@ -27,7 +27,7 @@ func main() {
 	ipv6 = "[" + strings.TrimSuffix(ipv6, "\n") + "]:8081"
 	conn, _ := net.Dial("tcp6", ipv6)
 	
-	symmetrickey := handleAesKeyExchangeClient(conn)
+	symmetricKey := handleAesKeyExchangeClient(conn)
 	fmt.Println("Key exchange successful. Connection established")
 
 	go func() { 
@@ -35,7 +35,7 @@ func main() {
 		 reader := bufio.NewReader(os.Stdin)
 		 fmt.Print("Text to send: ")
 		 text, _ := reader.ReadString('\n')
-		 conn.Write(aesEncrypt(symmetrickey, text))
+		 conn.Write(aesEncrypt(symmetricKey, text))
 		 conn.Write([]byte("\n"))
 		}
 	}()
@@ -47,7 +47,7 @@ func main() {
 				break
 			}
 			bytemessage := []byte(strings.TrimSuffix(message, "\n"))
-			plaintext := aesDecrypt(symmetrickey, bytemessage)
+			plaintext := aesDecrypt(symmetricKey, bytemessage)
 			fmt.Print("\nMessage:", plaintext)
 			fmt.Print("Text to send:")
 		}
@@ -85,7 +85,7 @@ func handleAesKeyExchangeClient(conn net.Conn) []byte {
 	return symmetrickey
 }
 
-func aesEncrypt(symmetrickey []byte,text string) []byte {
+func aesEncrypt(symmetrickey []byte, text string) []byte {
 	bytetext := []byte(text)
 	key := symmetrickey
 
