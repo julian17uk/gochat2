@@ -73,7 +73,7 @@ func handleAesKeyExchange(conn net.Conn) []byte {
 	symmetricKeyMessage = strings.TrimSuffix(symmetricKeyMessage, "\n")
 	symmetricKeyByte := []byte(symmetricKeyMessage)
 
-	// decrypt symmetricKey with rsa private key
+	// decrypt aes symmetric key (with rsa private key)
 	var v []byte
 	err = json.Unmarshal(symmetricKeyByte, &v)
 	hash := sha512.New()
@@ -160,29 +160,3 @@ func Ipv6Address() {
 	}
 	fmt.Println("This machines IPv6 address is ", ipaddress)
 }
-
-// func TestRSA(privateKey *PrivateKey) {
-// 	publicKey := privateKey.PublicKey
-	
-// 	encryptedBytes, err := rsa.EncryptOAEP(
-// 		sha256.New(),
-// 		rand.Reader,
-// 		&publicKey,
-// 		[]byte("super secret message"),
-// 		nil)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	fmt.Println("encrypted bytes: ", encryptedBytes)
-
-// 	fmt.Println("Now decrypting bytes...")
-
-// 	decryptedBytes, err := privateKey.Decrypt(nil, encryptedBytes, &rsa.OAEPOptions{Hash: crypto.SHA256})
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	fmt.Println("decrypted message: ", string(decryptedBytes))
-
-// 	fmt.Println("By the way the public key is: ", publicKey)
-// }

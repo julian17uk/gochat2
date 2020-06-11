@@ -19,7 +19,7 @@ import (
 var wg = sync.WaitGroup{}
 
 func main() {
-	fmt.Println("Please enter IPv6 address to connect to:")
+	fmt.Println("Please enter IPv6 address to connect:")
 	reader0 := bufio.NewReader(os.Stdin)
 	ipv6, _ := reader0.ReadString('\n')
 	ipv6 = "[" + strings.TrimSuffix(ipv6, "\n") + "]:8081"
