@@ -46,13 +46,13 @@ func main() {
 			wg.Done()
 			break
 		}
-//		message = strings.TrimSuffix(message, "\n")
 		bytemessage := []byte(strings.TrimSuffix(message, "\n"))
 		plaintext := aesDecrypt(symmetricKey, bytemessage)
 		fmt.Print("\nMessage:", plaintext)
 		fmt.Print("Text to send:")
 		}
 	}()
+
 	wg.Wait()
 }
 
@@ -62,21 +62,18 @@ func handleAesKeyExchange(conn net.Conn) []byte {
 		panic(err)
 	}
 	publicKey := privateKey.PublicKey
-
-	// use JSON to serialised rsa.PublicKey to a []byte and send to client
 	pubInJson, err := json.Marshal(publicKey)
 	conn.Write(pubInJson)
 	conn.Write([]byte("\n"))
 
-	// Wait for symmetricKey from client
 	symmetricKeyMessage, err := bufio.NewReader(conn).ReadString('\n')
 	if err != nil {
 		panic(err)
 	}
-
 	symmetricKeyMessage = strings.TrimSuffix(symmetricKeyMessage, "\n")
 	symmetricKeyByte := []byte(symmetricKeyMessage)
-	// Decrypt symmetricKey with RSA
+
+	// decrypt symmetricKey with rsa private key
 	var v []byte
 	err = json.Unmarshal(symmetricKeyByte, &v)
 	hash := sha512.New()
@@ -114,26 +111,6 @@ func aesEncrypt(symmetrickey []byte, text string) []byte {
 	return encryptedtext
 }
 
-func findmyipaddress1() {
-	ifaces, _ := net.Interfaces()
-	// handle err
-	for _, i := range ifaces {
-    	addrs, _ := i.Addrs()
-    	// handle err
-    	for _, addr := range addrs {
-        	var ip net.IP
-        	switch v := addr.(type) {
-        	case *net.IPNet:
-                ip = v.IP
-        	case *net.IPAddr:
-                ip = v.IP
-        	}
-		// process IP address
-			fmt.Println("This machines IP address is ", ip)
-    	}
-	}
-}
-
 func aesDecrypt(symmetrickey []byte, ciphertext []byte) string {
 	c, err := aes.NewCipher(symmetrickey)
 	if err != nil {
@@ -158,6 +135,26 @@ func aesDecrypt(symmetrickey []byte, ciphertext []byte) string {
 	}
 
 	return string(plaintext)
+}
+
+func findmyipaddress1() {
+	ifaces, _ := net.Interfaces()
+	// handle err
+	for _, i := range ifaces {
+    	addrs, _ := i.Addrs()
+    	// handle err
+    	for _, addr := range addrs {
+        	var ip net.IP
+        	switch v := addr.(type) {
+        	case *net.IPNet:
+                ip = v.IP
+        	case *net.IPAddr:
+                ip = v.IP
+        	}
+		// process IP address
+			fmt.Println("This machines IP address is ", ip)
+    	}
+	}
 }
 
 // func TestRSA(privateKey *PrivateKey) {
