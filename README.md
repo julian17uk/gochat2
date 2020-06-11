@@ -14,23 +14,11 @@ This README would normally document whatever steps are necessary to get your app
 
 To set up first install golang on your device. See https://golang.org/doc/install
 * Configuration: none required
-* Dependencies: This project makes use of the following standard golang packages
-	"net"
-	"fmt"
-	"bufio"
-	"strings"
-	"sync"
-	"os"
-	"io"
-	"crypto/aes"
-	"crypto/cipher"
-	"crypto/rsa"
-	"crypto/rand"
-	"crypto/sha512"
-	"encoding/json"
+* Dependencies: This project only makes use of standard golang packages
 * Database configuration: no db used
 * How to run tests
 * Deployment instructions:
+	To confirm that your machine is connected to IPv6 (and not only IPv4) run https://test-ipv6.com/ in a browser
 	To run the server user$ go run tcp-server.go
 	To run the client user$ go run tcp-client.go
 
