@@ -4,23 +4,21 @@ import (
 	"net"
 	"fmt"
 	"bufio"
-	"os"
+	"strings"
 	"sync"
+	"os"
+	"io"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rsa"
 	"crypto/rand"
 	"crypto/sha512"
 	"encoding/json"
-	"strings"
-	"io"
 )
 
 var wg = sync.WaitGroup{}
 
 func main() {
-	wg.Add(1)
-
 	fmt.Println("Please enter IPv6 address to connect to:")
 	reader0 := bufio.NewReader(os.Stdin)
 	ipv6, _ := reader0.ReadString('\n')
@@ -30,6 +28,7 @@ func main() {
 	symmetricKey := handleAesKeyExchangeClient(conn)
 	fmt.Println("Key exchange successful. Connection established")
 
+	wg.Add(1)
 	go func() { 
 		for {
 		 reader := bufio.NewReader(os.Stdin)
