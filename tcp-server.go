@@ -20,7 +20,7 @@ var wg = sync.WaitGroup{}
 
 func main() {
 	wg.Add(1)
-	findmyipaddress1()
+	Ipv6Address()
 	fmt.Println("Launching server, waiting for incoming connection...")
 
 	ln, _ := net.Listen("tcp6", "[::]:8081")
@@ -137,24 +137,28 @@ func aesDecrypt(symmetrickey []byte, ciphertext []byte) string {
 	return string(plaintext)
 }
 
-func findmyipaddress1() {
+func Ipv6Address() {
 	ifaces, _ := net.Interfaces()
-	// handle err
+	var ipaddress net.IP
+
 	for _, i := range ifaces {
     	addrs, _ := i.Addrs()
-    	// handle err
     	for _, addr := range addrs {
         	var ip net.IP
         	switch v := addr.(type) {
-        	case *net.IPNet:
+	    	case *net.IPNet:
                 ip = v.IP
-        	case *net.IPAddr:
-                ip = v.IP
+	      	case *net.IPAddr:
+              ip = v.IP
         	}
-		// process IP address
-			fmt.Println("This machines IP address is ", ip)
-    	}
+			var bytearray []byte
+			bytearray = ip
+			if bytearray[0] != 0 && bytearray[0] != 254 {
+				ipaddress = ip
+			}
+		}
 	}
+	fmt.Println("This machines IPv6 address is ", ipaddress)
 }
 
 // func TestRSA(privateKey *PrivateKey) {

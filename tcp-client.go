@@ -21,7 +21,7 @@ var wg = sync.WaitGroup{}
 func main() {
 	wg.Add(1)
 
-	fmt.Println("Please enter ipv6 address to connect to:")
+	fmt.Println("Please enter IPv6 address to connect to:")
 	reader0 := bufio.NewReader(os.Stdin)
 	ipv6, _ := reader0.ReadString('\n')
 	ipv6 = "[" + strings.TrimSuffix(ipv6, "\n") + "]:8081"
@@ -85,8 +85,8 @@ func handleAesKeyExchangeClient(conn net.Conn) []byte {
 	return symmetrickey
 }
 
-func aesEncrypt(symmetrickey []byte,texttosend string) []byte {
-	text := []byte(texttosend)
+func aesEncrypt(symmetrickey []byte,text string) []byte {
+	bytetext := []byte(text)
 	key := symmetrickey
 
 	c, err := aes.NewCipher(key)
@@ -106,7 +106,7 @@ func aesEncrypt(symmetrickey []byte,texttosend string) []byte {
 	if _, err = io.ReadFull(rand.Reader, nonce); err != nil {
 		fmt.Println(err)
 	}
-	encryptedtext := gcm.Seal(nonce, nonce, text, nil)
+	encryptedtext := gcm.Seal(nonce, nonce, bytetext, nil)
 
 	if err != nil {
 		fmt.Println(err)
