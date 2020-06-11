@@ -9,17 +9,30 @@ This README would normally document whatever steps are necessary to get your app
 * Encryption: The tcp connection between the server and client involves an initial handshake. First the server creates RSA keys and publishes the public key. The client creates an AES symmetric key and uses the RSA public key to encrypt the AES key which it returns to the server. The server then uses it's RSA private key to decrypt the AES key. This shared symmetric AES key is then used for encryption and decryption of communication
 
 * Version 0.1
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###
 
-* Summary of set up
-To set up first install go on your device. See https://golang.org/doc/install
-* Configuration
-* Dependencies
-* Database configuration
+To set up first install golang on your device. See https://golang.org/doc/install
+* Configuration: none required
+* Dependencies: This project makes use of the following standard golang packages
+	"net"
+	"fmt"
+	"bufio"
+	"strings"
+	"sync"
+	"os"
+	"io"
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/rsa"
+	"crypto/rand"
+	"crypto/sha512"
+	"encoding/json"
+* Database configuration: no db used
 * How to run tests
-* Deployment instructions
+* Deployment instructions:
+	To run the server user$ go run tcp-server.go
+	To run the client user$ go run tcp-client.go
 
 ### Contribution guidelines ###
 
@@ -29,5 +42,4 @@ To set up first install go on your device. See https://golang.org/doc/install
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+For comments contact: julian.karnik@ecs-digital.co.uk
