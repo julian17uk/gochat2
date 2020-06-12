@@ -9,7 +9,7 @@ This README would normally document whatever steps are necessary to get your app
 * Golang: The project makes use of the following golang packages: net, fmt, bufio, strings, sync, os, io, crypto/aes, crypto/cipher, crypto/rsa, crypto/rand, crypto/sha512, encoding/json.
 
 * Encryption Handshake: After the tcp connection between the server and client has been made, there is an initial handshake to secretly exchange a symmetric AES key. This shared key is then used for encryption and decryption of communication.
-* Step 1. First the server creates RSA keys and transmits the public key to the client. 
+* Step 1. First the server creates RSA public and private keys and transmits the public key to the client. 
 * Step 2. The client creates an AES symmetric key and uses the RSA public key to encrypt the AES key which it returns to the server.
 * Step 3. The server then uses it's RSA private key to decrypt the AES key.
 
