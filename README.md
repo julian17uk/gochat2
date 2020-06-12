@@ -4,7 +4,7 @@ This application provides encrypted chat communication between any two computers
 
 ### What is this repository for? ###
 
-* Quick summary: gochat is a project writen by Julian Karnik at ECS Digital. The service is written in golang and provides a chat tool via tcp using IPv6 only. The current version requires the tcp-server.go to be run first. The IPv6 address can then be used as an input into the tcp-client.go for connection.
+* Quick summary: gochat is a project writen by Julian Karnik at ECS Digital. The service is written in golang and provides a chat tool via tcp using IPv6 only. The current version requires the tcp-server.go to be run first. The IPv6 address of the computer running tcp-server.go can then be used as an input into the tcp-client.go for connection.
 
 * Golang: The project is written in go (golang) and makes use of the following golang packages: net, fmt, bufio, strings, sync, os, io, crypto/aes, crypto/cipher, crypto/rsa, crypto/rand, crypto/sha512, encoding/json.
 
