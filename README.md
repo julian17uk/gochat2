@@ -6,7 +6,9 @@ This README would normally document whatever steps are necessary to get your app
 
 * Quick summary: gochat is a project writen by Julian Karnik at ECS Digital. The service is written in golang and provides a chat tool via tcp using IPv6 only. The current version requires the tcp-server.go to be run first. The IPv6 address can then be used as an input into the tcp-client.go for connection.
 
-* Encryption: The tcp connection between the server and client involves an initial handshake. First the server creates RSA keys and publishes the public key. The client creates an AES symmetric key and uses the RSA public key to encrypt the AES key which it returns to the server. The server then uses it's RSA private key to decrypt the AES key. This shared symmetric AES key is then used for encryption and decryption of communication
+* Golang: The project makes use of the following golang packages: net, fmt, bufio, strings, sync, os, io, crypto/aes, crypto/cipher, crypto/rsa, crypto/rand, crypto/sha512, encoding/json.
+
+* Encryption: The tcp connection between the server and client involves an initial handshake. First the server creates RSA keys and publishes the public key. The client creates an AES symmetric key and uses the RSA public key to encrypt the AES key which it returns to the server. The server then uses it's RSA private key to decrypt the AES key. This shared symmetric AES key is then used for encryption and decryption of communication.
 
 * Version 0.1
 
@@ -18,8 +20,8 @@ This README would normally document whatever steps are necessary to get your app
 * How to run tests: 
 * IPv6 check: This app uses IPv6 only. To confirm your machine is connected via IPv6 visit https://test-ipv6.com/ in a browser
 * Deployment instructions:
-*	To run the server user$ go run tcp-server.go
-*	To run the client user$ go run tcp-client.go
+* 1. Run the server user$ go run tcp-server.go
+* 2. Run the client user$ go run tcp-client.go
 
 ### Contribution guidelines ###
 
