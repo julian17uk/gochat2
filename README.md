@@ -1,6 +1,6 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This application provides encrypted chat communication between any two computers connected to the internet via IPv6. 
 
 ### What is this repository for? ###
 
@@ -13,7 +13,7 @@ This README would normally document whatever steps are necessary to get your app
 * Step 2. The client creates an AES symmetric key and uses the RSA public key to encrypt the AES key which it returns to the server.
 * Step 3. The server then uses it's RSA private key to decrypt the AES key.
 
-* Version 0.1
+* Version 1.0
 
 ### How do I get set up? ###
 
