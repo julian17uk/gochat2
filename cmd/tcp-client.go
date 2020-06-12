@@ -9,17 +9,15 @@ import (
 	"os"
 	"../internal/encipher"
 	"../internal/keyexchange"
+	"../internal/utils"
 )
 
 var wg1 = sync.WaitGroup{}
 
 func main() {
 	fmt.Println("Please enter IPv6 address to connect:")
-	reader0 := bufio.NewReader(os.Stdin)
-	ipv6, _ := reader0.ReadString('\n')
-	ipv6 = strings.TrimSuffix(ipv6, "\n")
-	ipv6 = strings.TrimSpace(ipv6)
-	ipv6 = "[" + ipv6 + "]:8081"
+
+	ipv6 := GetIPv6Address()
 	conn, _ := net.Dial("tcp6", ipv6)
 	
 	symmetricKey := keyexchange.HandleClient(conn)
@@ -42,7 +40,7 @@ func main() {
 				wg1.Done()
 				break
 			}
-			bytemessage := []byte(strings.TrimSuffix(message, "\n"))
+			bytemessage := utils.MessageToByteArray(message)
 			plaintext := encipher.AesDecrypt(symmetricKey, bytemessage)
 			fmt.Print("\nMessage:", plaintext)
 			fmt.Print("Text to send:")
@@ -52,3 +50,11 @@ func main() {
 	wg1.Wait()
 }
 
+func GetIPv6Address() string {
+	reader0 := bufio.NewReader(os.Stdin)
+	ipv6, _ := reader0.ReadString('\n')
+	ipv6 = strings.TrimSuffix(ipv6, "\n")
+	ipv6 = strings.TrimSpace(ipv6)
+	ipv6 = "[" + ipv6 + "]:8081"
+	return ipv6
+}

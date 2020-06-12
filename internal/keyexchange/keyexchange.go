@@ -3,11 +3,11 @@ package keyexchange
 import (
 	"net"
 	"bufio"
-	"strings"
 	"crypto/rsa"
 	"crypto/rand"
 	"crypto/sha512"
 	"encoding/json"
+	"../utils"
 )
 
 func HandleClient(conn net.Conn) []byte {
@@ -15,28 +15,27 @@ func HandleClient(conn net.Conn) []byte {
 	if err != nil {
 		panic(err)
 	}
-	publicKeyMessage = strings.TrimSuffix(publicKeyMessage, "\n")
-	publicKeyByte := []byte(publicKeyMessage)
+
+	publicKeyByte := utils.MessageToByteArray(publicKeyMessage)
+
 	publicKey := &rsa.PublicKey{}
 	err = json.Unmarshal(publicKeyByte, publicKey)
 	if err != nil {
 		panic(err)
 	}
 	
-	// generate aes symmetric key, encrypt (with rsa public key) and send to server
-	symmetrickey := make([]byte, 32)
-	rand.Read(symmetrickey)
+	symmetricKey := make([]byte, 32)
+	rand.Read(symmetricKey)
 
 	hash := sha512.New()
-	ciphertext, err := rsa.EncryptOAEP(hash, rand.Reader, publicKey, symmetrickey, nil)
+	cipherText, err := rsa.EncryptOAEP(hash, rand.Reader, publicKey, symmetricKey, nil)
 	if err != nil {
 		panic(err)
 	}
-	pubInJson, err := json.Marshal(ciphertext)
-	conn.Write(pubInJson)
-	conn.Write([]byte("\n"))
 
-	return symmetrickey
+	utils.JsonWrite(conn, cipherText)
+
+	return symmetricKey
 }
 
 func HandleServer(conn net.Conn) []byte {
@@ -45,22 +44,23 @@ func HandleServer(conn net.Conn) []byte {
 		panic(err)
 	}
 	publicKey := privateKey.PublicKey
+
 	pubInJson, err := json.Marshal(publicKey)
 	conn.Write(pubInJson)
 	conn.Write([]byte("\n"))
 
-	symmetricKeyMessage, err := bufio.NewReader(conn).ReadString('\n')
+	cipherSymmetricKeyMessage, err := bufio.NewReader(conn).ReadString('\n')
 	if err != nil {
 		panic(err)
 	}
-	symmetricKeyMessage = strings.TrimSuffix(symmetricKeyMessage, "\n")
-	symmetricKeyByte := []byte(symmetricKeyMessage)
 
-	// decrypt aes symmetric key (with rsa private key)
-	var v []byte
-	err = json.Unmarshal(symmetricKeyByte, &v)
+	cipherSymmetricKeyByte := utils.MessageToByteArray(cipherSymmetricKeyMessage)
+
+	var cipherSymmetricKey []byte
+	err = json.Unmarshal(cipherSymmetricKeyByte, &cipherSymmetricKey)
 	hash := sha512.New()
-	symmetricKey, err := rsa.DecryptOAEP(hash, rand.Reader, privateKey, v, nil)
+	symmetricKey, err := rsa.DecryptOAEP(hash, rand.Reader, privateKey, cipherSymmetricKey, nil)
 
 	return symmetricKey
 }
+

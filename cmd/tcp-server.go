@@ -4,17 +4,17 @@ import (
 	"net"
 	"fmt"
 	"bufio"
-	"strings"
 	"sync"
 	"os"
 	"../internal/encipher"
 	"../internal/keyexchange"
+	"../internal/utils"
 )
 
 var wg = sync.WaitGroup{}
 
 func main() {
-	Ipv6Address()
+	FindIpv6Address()
 	fmt.Println("Launching server, waiting for incoming connection...")
 
 	ln, _ := net.Listen("tcp6", "[::]:8081")
@@ -41,7 +41,7 @@ func main() {
 			wg.Done()
 			break
 		}
-		bytemessage := []byte(strings.TrimSuffix(message, "\n"))
+		bytemessage := utils.MessageToByteArray(message)
 		plaintext := encipher.AesDecrypt(symmetricKey, bytemessage)
 		fmt.Print("\nMessage:", plaintext)
 		fmt.Print("Text to send:")
@@ -53,7 +53,7 @@ func main() {
 
 
 
-func Ipv6Address() {
+func FindIpv6Address() {
 	ifaces, _ := net.Interfaces()
 	var ipaddress net.IP
 
