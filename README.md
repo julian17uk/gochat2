@@ -27,7 +27,9 @@ This application provides encrypted chat communication between any two computers
 * Deployment instructions in the terminal:
 * Step 1. On Machine A run the server userA$ go run tcp-server.go
 * Step 2. On Machine B run the client userB$ go run tcp-client.go
-* gochat is working once the following message has been receieved "Key exchange successful. Connection established"
+* Step 3. userA sends their ipv6 address to userB
+* Step 4. userB inputs this ipv6 address as requested
+* gochat is working once the following message has been receieved by both users "Key exchange successful. Connection established"
 * To end the service on both sides press Ctrl-C in either server or client terminal.
 
 ### Contribution guidelines ###
