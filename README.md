@@ -1,4 +1,4 @@
-s# README #
+# README #
 
 This README would normally document whatever steps are necessary to get your application up and running.
 
@@ -12,7 +12,7 @@ This README would normally document whatever steps are necessary to get your app
 
 ### How do I get set up? ###
 
-To set up first install golang on your device. See https://golang.org/doc/install
+* To set up first install golang on your device. See https://golang.org/doc/install
 * Configuration: none required
 * Dependencies: This project only makes use of standard golang packages
 * Database configuration: no db used
