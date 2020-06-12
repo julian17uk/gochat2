@@ -16,8 +16,8 @@ var wg1 = sync.WaitGroup{}
 
 func main() {
 	fmt.Println("Please enter IPv6 address to connect:")
-	ipv6 := ipv6.GetIPv6Address()
-	
+	ipv6 := ipv6.GetIPv6Address(os.Stdin , "8081")
+
 	conn, _ := net.Dial("tcp6", ipv6)
 	symmetricKey := keyexchange.HandleClient(conn)
 	

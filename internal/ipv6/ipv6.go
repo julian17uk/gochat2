@@ -4,15 +4,20 @@ import (
 	"net"
 	"strings"
 	"bufio"
-	"os"
+	"io"
 )
 
-func GetIPv6Address() string {
-	reader0 := bufio.NewReader(os.Stdin)
-	ipv6, _ := reader0.ReadString('\n')
+func GetIPv6Address(stdin io.Reader, port string) string {
+	ipv6 := ReadIPv6Address(stdin)
 	ipv6 = strings.TrimSuffix(ipv6, "\n")
 	ipv6 = strings.TrimSpace(ipv6)
-	ipv6 = "[" + ipv6 + "]:8081"
+	ipv6 = "[" + ipv6 + "]:" + port
+	return ipv6
+}
+
+func ReadIPv6Address(stdin io.Reader) string {
+	reader := bufio.NewReader(stdin)
+	ipv6, _ := reader.ReadString('\n')
 	return ipv6
 }
 
