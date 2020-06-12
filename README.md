@@ -25,8 +25,8 @@ This application provides encrypted chat communication between any two computers
 * How to run tests: user$ go test -v (from within the test folder)
 * IPv6 check: This app uses IPv6 only. To confirm your machine is connected via IPv6 visit https://test-ipv6.com/ in a browser
 * Deployment instructions:
-* Step 1. Run the server user$ go run tcp-server.go
-* Step 2. Run the client user$ go run tcp-client.go
+* Step 1. On Machine A run the server user$ go run tcp-server.go
+* Step 2. On Machine B run the client user$ go run tcp-client.go
 
 ### Contribution guidelines ###
 
