@@ -20,7 +20,7 @@ This application provides encrypted chat communication between any two computers
 * To set up first install golang on your device. See https://golang.org/doc/install
 * Configuration: none required
 * Dependencies: This project only makes use of standard golang packages. See https://golang.org/pkg/
-* How to run tests: 
+* How to run tests: user$ go test -v (from within the client or server folder)
 * IPv6 check: This app uses IPv6 only. To confirm your machine is connected via IPv6 visit https://test-ipv6.com/ in a browser
 * Deployment instructions:
 * Step 1. Run the server user$ go run tcp-server.go
